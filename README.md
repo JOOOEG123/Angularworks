@@ -1,6 +1,7 @@
 # Covidappus
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.7.
+[Screen Recording (5-2-2024 11-16-29 PM).webm](https://github.com/JOOOEG123/Angularworks/assets/57308580/8a38bdae-ef25-4e9c-9c54-c9b28bc75a55)
 
 ## Development server
 
