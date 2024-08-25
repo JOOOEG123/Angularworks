@@ -1,11 +1,41 @@
 import { Injectable } from '@angular/core';
 
+import { FormGroup, FormArray, AbstractControl } from '@angular/forms';
+
 @Injectable({
   providedIn: 'root'
 })
 export class CsvService {
 
   constructor() {}
+
+
+
+resetFormGroup(formGroup: FormGroup | FormArray, resetValues: any) {
+  if (formGroup instanceof FormGroup) {
+    Object.keys(resetValues).forEach(key => {
+      const control = formGroup.get(key);
+      if (control instanceof FormGroup || control instanceof FormArray) {
+        // Recursively reset nested FormGroup or FormArray
+        this.resetFormGroup(control, resetValues[key]);
+      } else {
+        // Reset the value of the control
+        control.patchValue(resetValues[key]);
+      }
+    });
+  } else if (formGroup instanceof FormArray) {
+    formGroup.controls.forEach((control, index) => {
+      if (control instanceof FormGroup || control instanceof FormArray) {
+        // Recursively reset nested FormGroup or FormArray
+        this.resetFormGroup(control, resetValues[index]);
+      } else {
+        // Reset the value of the control
+        control.patchValue(resetValues[index]);
+      }
+    });
+  }
+}
+
 
   flattenObject(obj: any, parentKey = '', separator = '.'): any {
     return Object.keys(obj).reduce((acc, key) => {
