@@ -3,72 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download CSV with Randomized Data</title>
+    <title>Dynamic Table Example</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 20px auto;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
-    <h1>Download CSV Example with Randomized Values</h1>
-    <button id="downloadBtn">Download CSV</button>
+<div id="table-container"></div>
 
-    <script>
-        // Original data to be randomized
-        const csvData = [
-            ["Name", "Age", "Country"],  // CSV Header
-            ["John Doe", "29", "USA"],
-            ["Jane Smith", "35", "Canada"],
-            ["Sam Brown", "23", "UK"]
-        ];
+<script>
+    function generateTable(data) {
+        const table = document.createElement('table');
 
-        // Function to generate random names
-        function getRandomName() {
-            const names = ["Alice", "Bob", "Charlie", "David", "Emily", "Frank", "Grace"];
-            return names[Math.floor(Math.random() * names.length)];
-        }
-
-        // Function to generate random age between 20 and 50
-        function getRandomAge() {
-            return Math.floor(Math.random() * 31) + 20;  // Generates a random age between 20 and 50
-        }
-
-        // Function to randomly select a country
-        function getRandomCountry() {
-            const countries = ["USA", "Canada", "UK", "Germany", "France", "Australia", "Japan"];
-            return countries[Math.floor(Math.random() * countries.length)];
-        }
-
-        // Function to randomize data (excluding the header row)
-        function randomizeData(data) {
-            return data.map((row, index) => {
-                if (index === 0) return row; // Keep the header unchanged
-                return [getRandomName(), getRandomAge(), getRandomCountry()];
-            });
-        }
-
-        // Function to convert array data to CSV format
-        function arrayToCSV(data) {
-            return data.map(row => row.join(",")).join("\n");
-        }
-
-        // Function to trigger CSV file download
-        function downloadCSV(filename, data) {
-            const csvContent = arrayToCSV(data);
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            
-            link.setAttribute("href", url);
-            link.setAttribute("download", filename);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        // Event listener for button click
-        document.getElementById('downloadBtn').addEventListener('click', function() {
-            const randomizedData = randomizeData(csvData);
-            downloadCSV("randomized_sample.csv", randomizedData);
+        // Create header row
+        const headerRow = document.createElement('tr');
+        data[0].forEach((header) => {
+            const th = document.createElement('th');
+            th.textContent = header;
+            headerRow.appendChild(th);
         });
-    </script>
+        table.appendChild(headerRow);
+
+        // Create data rows
+        for (let i = 1; i < data.length; i++) {
+            const row = document.createElement('tr');
+            data[i].forEach((cell) => {
+                const td = document.createElement('td');
+                td.textContent = cell;
+                row.appendChild(td);
+            });
+            table.appendChild(row);
+        }
+
+        document.getElementById('table-container').appendChild(table);
+    }
+
+    const data = [['Header 1', 'Header 2'], ['a', 'b'], [1, 2]];
+    generateTable(data);
+</script>
 
 </body>
 </html>
